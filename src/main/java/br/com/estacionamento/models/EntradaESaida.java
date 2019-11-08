@@ -15,8 +15,7 @@ public class EntradaESaida {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "O campo 'tipo' é obrigatório.")
-    @Column(name = "tipo", length = 15, nullable = false)
+    @Column(name = "tipo", length = 15, nullable = true)
     private String tipo;
 
     @NotNull(message = "O campo 'dataHora' no formato 'yyyy-mm-ddThh:mm:ss.mmmZ' é obrigatório")

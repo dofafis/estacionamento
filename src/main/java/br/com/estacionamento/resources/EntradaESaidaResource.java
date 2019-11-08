@@ -5,7 +5,9 @@ import br.com.estacionamento.services.EntradaESaidaService;
 import br.com.estacionamento.services.VeiculoService;
 import br.com.estacionamento.services.precos.TabelaDePrecos;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -15,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+@Validated
 public class EntradaESaidaResource {
 
     @Autowired
@@ -28,7 +31,7 @@ public class EntradaESaidaResource {
     @POST
     @Path("/entrada")
     @Produces(MediaType.APPLICATION_JSON)
-    public void entrada(@Suspended AsyncResponse asyncResponse, EntradaESaida entradaESaida) {
+    public void entrada(@Suspended AsyncResponse asyncResponse, @Valid EntradaESaida entradaESaida) {
         entradaESaida.setVeiculo(this.veiculoService.save(entradaESaida.getVeiculo()));
 
         entradaESaida.setTipo("ENTRADA");
@@ -40,7 +43,7 @@ public class EntradaESaidaResource {
     @POST
     @Path("/saida")
     @Produces(MediaType.APPLICATION_JSON)
-    public void saida(@Suspended AsyncResponse asyncResponse, EntradaESaida entradaESaida) {
+    public void saida(@Suspended AsyncResponse asyncResponse, @Valid EntradaESaida entradaESaida) {
 
         entradaESaida.setVeiculo(this.veiculoService.save(entradaESaida.getVeiculo()));
 

@@ -7,16 +7,17 @@ import br.com.estacionamento.repositories.EntradaESaidaRepository;
 import br.com.estacionamento.services.precos.TabelaDePrecos;
 import br.com.estacionamento.exceptions.SaidaInvalida;
 import br.com.estacionamento.exceptions.SaidaRepetida;
+import com.sun.scenario.effect.Offset;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
-@Configurable
 public class EntradaESaidaService {
 
     @Autowired
@@ -31,7 +32,8 @@ public class EntradaESaidaService {
     public Object save(EntradaESaida entradaESaida) {
         if(entradaESaida.getTipo().equals("ENTRADA")){
             EntradaESaida entradaNaoRepetida = this.entradaESaidaRepository
-                    .getTopByVeiculoIdOrderByDataHoraDesc(entradaESaida.getVeiculo().getId());
+                    .getTopByVeiculoIdOrderByIdDesc(entradaESaida.getVeiculo().getId());
+
             // Carro entrando duas vezes, sem sair, o que não faz sentido
             if(entradaNaoRepetida != null && entradaNaoRepetida.getTipo().equals("ENTRADA"))
                 return new EntradaRepetida();
@@ -44,7 +46,8 @@ public class EntradaESaidaService {
             }
         }else {
             EntradaESaida saidaNaoRepetida = this.entradaESaidaRepository
-                    .getTopByVeiculoIdOrderByDataHoraDesc(entradaESaida.getVeiculo().getId());
+                    .getTopByVeiculoIdOrderByIdDesc(entradaESaida.getVeiculo().getId());
+
 
             // Carro tentando sair sem entrar, sem entrar, o que não faz sentido
             if(saidaNaoRepetida == null)
@@ -53,7 +56,7 @@ public class EntradaESaidaService {
                 return new SaidaRepetida();
             else {
                 entradaESaida = this.entradaESaidaRepository.save(entradaESaida);
-                precoService.getPreco(entradaESaida.getVeiculo().getId());
+                precoService.getPreco(entradaESaida.getVeiculo().getPlaca());
                 return entradaESaida;
             }
         }
@@ -75,13 +78,13 @@ public class EntradaESaidaService {
     }
 
     @Transactional
-    public EntradaESaida getTopByTipoAndVeiculoIdOrderByDataHoraDesc(String tipo, Long idVeiculo) {
-        return this.entradaESaidaRepository.getTopByTipoAndVeiculoIdOrderByDataHoraDesc(tipo, idVeiculo);
+    public EntradaESaida getTopByTipoAndVeiculoIdOrderByDataHoraAsc(String tipo, Long idVeiculo) {
+        return this.entradaESaidaRepository.getTopByTipoAndVeiculoIdOrderByIdDesc(tipo, idVeiculo);
     }
 
     @Transactional
-    public EntradaESaida getTopByTipoAndVeiculoIdAndDataHoraAfterOrderByDataHoraDesc(String tipo, Long idVeiculo, Instant dataHora) {
-        return this.entradaESaidaRepository.getTopByTipoAndVeiculoIdAndDataHoraBeforeOrderByDataHoraDesc(tipo, idVeiculo, dataHora);
+    public EntradaESaida getTopByTipoAndVeiculoIdAndDataHoraAfterOrderByDataHoraAsc(String tipo, Long idVeiculo, OffsetDateTime dataHora) {
+        return this.entradaESaidaRepository.getTopByTipoAndVeiculoIdAndDataHoraBeforeOrderByIdDesc(tipo, idVeiculo, dataHora);
     }
 
 }

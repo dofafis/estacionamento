@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/preco")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-@RestController
+@Validated
 public class PrecoResource {
 
     @Autowired
@@ -24,8 +24,8 @@ public class PrecoResource {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public void preco(@Suspended AsyncResponse asyncResponse, @QueryParam("id_veiculo") Long idVeiculo) {
-        asyncResponse.resume(this.precoService.getPreco(idVeiculo));
+    public void preco(@Suspended AsyncResponse asyncResponse, @QueryParam("placa") String placa) {
+        asyncResponse.resume(this.precoService.getPreco(placa));
     }
 
     @GET

@@ -29,16 +29,23 @@ public class PrecoService {
     @Autowired
     private EntradaESaidaService entradaESaidaService;
 
+    @Autowired
+    private VeiculoService veiculoService;
+
     private TabelaDePrecos tabelaDePrecos = new TabelaDePrecos();
 
     @Transactional
-    public Object getPreco(Long idVeiculo) {
+    public Object getPreco(String placa) {
+
+        Long idVeiculo = this.veiculoService.getVeiculoIdByPlaca(placa);
+
+
 
         Preco preco = new Preco();
-        EntradaESaida ultimaEntrada = this.entradaESaidaService.getTopByTipoAndVeiculoIdOrderByDataHoraDesc("ENTRADA", idVeiculo), ultimaSaida = null;
+        EntradaESaida ultimaEntrada = this.entradaESaidaService.getTopByTipoAndVeiculoIdOrderByDataHoraAsc("ENTRADA", idVeiculo), ultimaSaida = null;
 
         if(ultimaEntrada != null)
-            ultimaSaida = this.entradaESaidaService.getTopByTipoAndVeiculoIdOrderByDataHoraDesc("SAIDA", idVeiculo);
+            ultimaSaida = this.entradaESaidaService.getTopByTipoAndVeiculoIdOrderByDataHoraAsc("SAIDA", idVeiculo);
 
         if(ultimaEntrada != null && ultimaSaida != null && ultimaEntrada.getDataHora().isBefore(ultimaSaida.getDataHora())){
             preco.setEntrada(ultimaEntrada);

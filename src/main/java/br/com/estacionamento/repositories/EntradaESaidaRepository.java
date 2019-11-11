@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Repository
@@ -14,11 +15,11 @@ public interface EntradaESaidaRepository extends CrudRepository<EntradaESaida, L
 
     List<EntradaESaida> getEntradaESaidaByVeiculoId(Long idVeiculo);
 
-    EntradaESaida getTopByTipoAndVeiculoIdOrderByDataHoraDesc(String tipo, Long idVeiculo);
+    EntradaESaida getTopByTipoAndVeiculoIdOrderByIdDesc(String tipo, Long idVeiculo);
 
-    EntradaESaida getTopByVeiculoIdOrderByDataHoraDesc(Long idVeiculo);
+    EntradaESaida getTopByVeiculoIdOrderByIdDesc(Long idVeiculo);
 
-    EntradaESaida getTopByTipoAndVeiculoIdAndDataHoraBeforeOrderByDataHoraDesc(String tipo, Long idVeiculo, Instant dataHora);
+    EntradaESaida getTopByTipoAndVeiculoIdAndDataHoraBeforeOrderByIdDesc(String tipo, Long idVeiculo, OffsetDateTime dataHora);
 
     @Query("select e from EntradaESaida e")
     List<EntradaESaida> getAll();

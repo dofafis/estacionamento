@@ -20,7 +20,6 @@ import static br.com.estacionamento.JerseyConfig.API_PATH;
 @Component
 @Primary
 @ApplicationPath(API_PATH)
-@ComponentScan(basePackages = { "br.com.estacionamento.resources", "br.com.estacionamento.services", "br.com.estacionamento" })
 public class JerseyConfig extends ResourceConfig {
 
     public static final String API_PATH = "/api";
@@ -30,9 +29,6 @@ public class JerseyConfig extends ResourceConfig {
         register(EntradaESaidaResource.class);
         register(VeiculoResource.class);
         register(PrecoResource.class);
-        register(PrecoService.class);
-        register(EntradaESaidaService.class);
-        register(VeiculoService.class);
 
         property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
 

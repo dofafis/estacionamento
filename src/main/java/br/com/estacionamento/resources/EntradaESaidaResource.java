@@ -20,7 +20,7 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-@RestController
+@Validated
 public class EntradaESaidaResource {
 
     @Autowired

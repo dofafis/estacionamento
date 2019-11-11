@@ -30,4 +30,8 @@ public class VeiculoService {
         }
     }
 
+    public Long getVeiculoIdByPlaca(String placa) {
+        Veiculo veiculo = this.veiculoRepository.getByPlaca(placa);
+        return veiculo == null ? null : veiculo.getId();
+    }
 }

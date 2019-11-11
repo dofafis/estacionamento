@@ -8,7 +8,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-@RestController
 public class VeiculoResource {
 
     @Autowired

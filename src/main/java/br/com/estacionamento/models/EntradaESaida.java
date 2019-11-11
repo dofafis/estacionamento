@@ -2,13 +2,12 @@ package br.com.estacionamento.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.OffsetDateTimeSerializer;
 import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.Instant;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -25,7 +24,7 @@ public class EntradaESaida {
 
     @NotNull(message = "O campo 'dataHora' no formato 'yyyy-mm-ddThh:mm:ss.mmmZ' é obrigatório")
     @Column(name = "data_hora", nullable = false)
-    @JsonSerialize(using = InstantSerializer.class)
+    @JsonSerialize(using = OffsetDateTimeSerializer.class)
     @JsonDeserialize(using = DefaultInstantDeserializer.class)
     private OffsetDateTime dataHora;
 

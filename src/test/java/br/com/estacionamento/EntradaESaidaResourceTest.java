@@ -2,17 +2,24 @@ package br.com.estacionamento;
 
 import br.com.estacionamento.models.EntradaESaida;
 import br.com.estacionamento.models.Veiculo;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
+import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.client.RestTemplate;
 
-import javax.xml.ws.Response;
-import java.time.Instant;
+import javax.annotation.PostConstruct;
 import java.time.OffsetDateTime;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EntradaESaidaResourceTest {
 
@@ -20,10 +27,22 @@ public class EntradaESaidaResourceTest {
     private int port;
 
     @Autowired
+    RestTemplateBuilder restTemplateBuilder;
+
     private TestRestTemplate restTemplate;
 
+    @PostConstruct
+    public void initialize() {
+        RestTemplate customTemplate = restTemplateBuilder
+                .rootUri("http://localhost:"+this.port)
+                .build();
+        this.restTemplate = new TestRestTemplate(customTemplate,
+                null, null, //I don't use basic auth, if you do you can set user, pass here
+                TestRestTemplate.HttpClientOption.ENABLE_COOKIES); // I needed cookie support in this particular test, you may not have this need
+    }
+
     @Test
-    void entradaSucesso() {
+    public void entradaSucesso() {
         EntradaESaida entradaESaida = new EntradaESaida();
         entradaESaida.setDataHora(OffsetDateTime.parse("2019-11-08T13:50:00.000Z"));
         entradaESaida.setVeiculo(new Veiculo());
@@ -37,7 +56,7 @@ public class EntradaESaidaResourceTest {
     }
 
     @Test
-    void entradaSemDataEHora() {
+    public void entradaSemDataEHora() {
         EntradaESaida entradaESaida = new EntradaESaida();
         //entradaESaida.setDataHora(Instant.parse("2019-11-08T13:50:00.000Z"));
         entradaESaida.setVeiculo(new Veiculo());
@@ -50,7 +69,7 @@ public class EntradaESaidaResourceTest {
     }
 
     @Test
-    void saidaSucesso() {
+    public void saidaSucesso() {
         EntradaESaida entradaESaida = new EntradaESaida();
         entradaESaida.setDataHora(OffsetDateTime.parse("2019-11-08T13:50:00.000Z"));
         entradaESaida.setVeiculo(new Veiculo());
@@ -64,7 +83,7 @@ public class EntradaESaidaResourceTest {
     }
 
     @Test
-    void saidaSemDataEHora() {
+    public void saidaSemDataEHora() {
         EntradaESaida entradaESaida = new EntradaESaida();
         //entradaESaida.setDataHora(Instant.parse("2019-11-08T13:50:00.000Z"));
         entradaESaida.setVeiculo(new Veiculo());

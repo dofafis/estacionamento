@@ -7,13 +7,10 @@ import br.com.estacionamento.repositories.EntradaESaidaRepository;
 import br.com.estacionamento.services.precos.TabelaDePrecos;
 import br.com.estacionamento.exceptions.SaidaInvalida;
 import br.com.estacionamento.exceptions.SaidaRepetida;
-import com.sun.scenario.effect.Offset;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.List;
 

@@ -33,10 +33,6 @@ public class EntradaESaidaResource {
     @Path("/entrada")
     @Produces(MediaType.APPLICATION_JSON)
     public void entrada(@Suspended AsyncResponse asyncResponse, @Valid EntradaESaida entradaESaida) {
-        System.out.println("@#@#@#@#@& ");
-        System.out.println(entradaESaida.toString());
-        System.out.println("@#@#@#@#@& ");
-        System.out.println(this.veiculoService.toString());
         Veiculo veiculo = entradaESaida.getVeiculo();
         veiculo = this.veiculoService.save(veiculo);
 

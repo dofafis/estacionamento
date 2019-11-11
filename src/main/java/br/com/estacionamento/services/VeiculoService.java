@@ -17,9 +17,7 @@ public class VeiculoService {
 
     @Transactional
     public Veiculo save(Veiculo veiculo) {
-        System.out.println("@#@#@#@#@& 1111");
         Veiculo aux = this.veiculoRepository.getByPlaca(veiculo.getPlaca());
-        System.out.println("@#@#@#@#@& 2222");
 
         if(aux == null)
             return this.veiculoRepository.save(veiculo);

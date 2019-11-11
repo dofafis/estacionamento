@@ -7,13 +7,11 @@ import br.com.estacionamento.repositories.PrecoRepository;
 import br.com.estacionamento.services.precos.TabelaDePrecos;
 import br.com.estacionamento.dto.PrecoDTO;
 import br.com.estacionamento.models.Preco;
-import com.sun.scenario.effect.Offset;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;

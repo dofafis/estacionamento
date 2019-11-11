@@ -8,9 +8,13 @@ Com esse ambiente configurado, basta rodar os comandos na pasta do projeto:
 - ```gradle build ``` e ```gradle bootRun```(Linux)
 - ```gradlew build ``` e ```gradlew bootRun```(Windows)
 
+OBS: O projeto está apontando para o banco no *Heroku*, caso queira alterar para um banco local, basta criar um banco Postgresql na sua máquina e alterar o arquivo application.properties
+
 Para executar os testes unitários, rode o comando:
 - ```gradle test``` (Linux)
 - ```gradlew test``` (Windows)
+
+OBS: O application.properties dos testes está apontando para um banco local com nome 'estacionamento-teste', altere o usuário host e senha para utilizar.
 
 Ou você pode utilizar a api hospedada no *Heroku* no host:
 - https://estacionamento-teste.herokuapp.com + {endpoint desejado}

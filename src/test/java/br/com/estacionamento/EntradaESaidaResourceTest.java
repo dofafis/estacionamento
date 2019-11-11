@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 
 import javax.xml.ws.Response;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EntradaESaidaResourceTest {
@@ -24,7 +25,7 @@ public class EntradaESaidaResourceTest {
     @Test
     void entradaSucesso() {
         EntradaESaida entradaESaida = new EntradaESaida();
-        entradaESaida.setDataHora(Instant.parse("2019-11-08T13:50:00.000Z"));
+        entradaESaida.setDataHora(OffsetDateTime.parse("2019-11-08T13:50:00.000Z"));
         entradaESaida.setVeiculo(new Veiculo());
         entradaESaida.getVeiculo().setModelo("HB20");
         entradaESaida.getVeiculo().setCor("AZUL");
@@ -51,7 +52,7 @@ public class EntradaESaidaResourceTest {
     @Test
     void saidaSucesso() {
         EntradaESaida entradaESaida = new EntradaESaida();
-        entradaESaida.setDataHora(Instant.parse("2019-11-08T13:50:00.000Z"));
+        entradaESaida.setDataHora(OffsetDateTime.parse("2019-11-08T13:50:00.000Z"));
         entradaESaida.setVeiculo(new Veiculo());
         entradaESaida.getVeiculo().setModelo("HB20");
         entradaESaida.getVeiculo().setCor("AZUL");

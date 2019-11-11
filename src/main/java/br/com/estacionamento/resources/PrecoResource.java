@@ -2,6 +2,8 @@ package br.com.estacionamento.resources;
 
 import br.com.estacionamento.services.PrecoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -13,10 +15,11 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/preco")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+@RestController
 public class PrecoResource {
 
     @Autowired
-    PrecoService precoService;
+    private PrecoService precoService;
 
     @GET
     @Path("/")

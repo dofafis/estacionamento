@@ -1,11 +1,14 @@
 package br.com.estacionamento.resources;
 
 import br.com.estacionamento.models.EntradaESaida;
+import br.com.estacionamento.models.Veiculo;
 import br.com.estacionamento.services.EntradaESaidaService;
 import br.com.estacionamento.services.VeiculoService;
-import br.com.estacionamento.services.precos.TabelaDePrecos;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.ws.rs.POST;
@@ -17,22 +20,27 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-@Validated
+@RestController
 public class EntradaESaidaResource {
 
     @Autowired
-    VeiculoService veiculoService;
+    private VeiculoService veiculoService;
 
     @Autowired
-    EntradaESaidaService entradaESaidaService;
-
-    private TabelaDePrecos tabelaDePrecos = new TabelaDePrecos();
+    private EntradaESaidaService entradaESaidaService;
 
     @POST
     @Path("/entrada")
     @Produces(MediaType.APPLICATION_JSON)
     public void entrada(@Suspended AsyncResponse asyncResponse, @Valid EntradaESaida entradaESaida) {
-        entradaESaida.setVeiculo(this.veiculoService.save(entradaESaida.getVeiculo()));
+        System.out.println("@#@#@#@#@& ");
+        System.out.println(entradaESaida.toString());
+        System.out.println("@#@#@#@#@& ");
+        System.out.println(this.veiculoService.toString());
+        Veiculo veiculo = entradaESaida.getVeiculo();
+        veiculo = this.veiculoService.save(veiculo);
+
+        entradaESaida.setVeiculo(veiculo);
 
         entradaESaida.setTipo("ENTRADA");
 

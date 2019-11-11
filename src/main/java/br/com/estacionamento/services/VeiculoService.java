@@ -4,23 +4,23 @@ import br.com.estacionamento.models.Veiculo;
 import br.com.estacionamento.repositories.VeiculoRepository;
 import br.com.estacionamento.services.precos.TabelaDePrecos;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Configurable
 public class VeiculoService {
 
     @Autowired
-    VeiculoRepository veiculoRepository;
-
-    @Autowired
-    EntradaESaidaService entradaESaidaService;
-
-    private TabelaDePrecos tabelaDePrecos = new TabelaDePrecos();
+    private VeiculoRepository veiculoRepository;
 
     @Transactional
     public Veiculo save(Veiculo veiculo) {
+        System.out.println("@#@#@#@#@& 1111");
         Veiculo aux = this.veiculoRepository.getByPlaca(veiculo.getPlaca());
+        System.out.println("@#@#@#@#@& 2222");
+
         if(aux == null)
             return this.veiculoRepository.save(veiculo);
         else {
@@ -28,21 +28,6 @@ public class VeiculoService {
             aux.setCor(veiculo.getCor());
             return this.veiculoRepository.save(aux);
         }
-    }
-
-    @Transactional
-    public void delete(Veiculo veiculo) {
-        this.veiculoRepository.delete(veiculo);
-    }
-
-    @Transactional
-    public Veiculo getById(Long id) {
-        return this.veiculoRepository.getById(id);
-    }
-
-    @Transactional
-    public Veiculo getByPlaca(String placa) {
-        return this.veiculoRepository.getByPlaca(placa);
     }
 
 }

@@ -8,6 +8,7 @@ import br.com.estacionamento.services.precos.TabelaDePrecos;
 import br.com.estacionamento.exceptions.SaidaInvalida;
 import br.com.estacionamento.exceptions.SaidaRepetida;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,16 +16,14 @@ import java.time.Instant;
 import java.util.List;
 
 @Service
+@Configurable
 public class EntradaESaidaService {
 
     @Autowired
-    EntradaESaidaRepository entradaESaidaRepository;
+    private EntradaESaidaRepository entradaESaidaRepository;
 
     @Autowired
-    VeiculoService veiculoService;
-
-    @Autowired
-    PrecoService precoService;
+    private PrecoService precoService;
 
     private TabelaDePrecos tabelaDePrecos = new TabelaDePrecos();
 

@@ -7,11 +7,14 @@ import br.com.estacionamento.repositories.PrecoRepository;
 import br.com.estacionamento.services.precos.TabelaDePrecos;
 import br.com.estacionamento.dto.PrecoDTO;
 import br.com.estacionamento.models.Preco;
+import com.sun.scenario.effect.Offset;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Configurable
 public class PrecoService {
 
     @Autowired
@@ -58,11 +62,11 @@ public class PrecoService {
     @Transactional
     public List<PrecoDTO> getRelatorio() {
         List<Preco> todosPrecos = this.precoRepository.getAll();
-        Map<Instant, Long> aux = new HashMap<>();
+        Map<OffsetDateTime, Long> aux = new HashMap<>();
         List<PrecoDTO> precoDTO = new ArrayList<>();
 
         for (Preco preco : todosPrecos) {
-            Instant dia = preco.getEntrada().getDataHora().truncatedTo(ChronoUnit.DAYS);
+            OffsetDateTime dia = preco.getEntrada().getDataHora().truncatedTo(ChronoUnit.DAYS);
 
             if(aux.containsKey(dia))
                 aux.put(dia, aux.get(dia) + preco.getValor());
@@ -70,7 +74,7 @@ public class PrecoService {
                 aux.put(dia, preco.getValor());
         }
 
-        for (Instant dia : aux.keySet())
+        for (OffsetDateTime dia : aux.keySet())
             precoDTO.add(new PrecoDTO(dia, aux.get(dia)));
 
         return precoDTO;

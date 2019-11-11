@@ -38,22 +38,22 @@ public class TabelaDePrecos {
         return this.precoParaCalculos;
     }
 
-    public Boolean dataDeEntradaEhValida(Instant now) {
+    public Boolean dataDeEntradaEhValida(OffsetDateTime now) {
         // Se o dia da semana é igual e está no intervalo de tempo definido na tabela de preços, retorna true
         // Se não se encaixa em nenhum dos preços da tabela de preços, retorna false
-        return this.precoParaCalculos.stream().anyMatch(precoParaCalculo -> (DayOfWeek.from(now.atZone(ZoneId.of("UTC"))).equals(DayOfWeek.of(precoParaCalculo.getDay().intValue()))) &&
-                ((LocalTime.from(now.atZone(ZoneId.of("UTC"))).isAfter(precoParaCalculo.getInicio()) && LocalTime.from(now.atZone(ZoneId.of("UTC"))).isBefore(precoParaCalculo.getFim()))
-                        || LocalTime.from(now.atZone(ZoneId.of("UTC"))).equals(precoParaCalculo.getInicio()) || LocalTime.from(now.atZone(ZoneId.of("UTC"))).equals(precoParaCalculo.getFim())));
+        return this.precoParaCalculos.stream().anyMatch(precoParaCalculo -> (DayOfWeek.from(now.atZoneSameInstant(ZoneId.of("UTC"))).equals(DayOfWeek.of(precoParaCalculo.getDay().intValue()))) &&
+                ((LocalTime.from(now.atZoneSameInstant(ZoneId.of("UTC"))).isAfter(precoParaCalculo.getInicio()) && LocalTime.from(now.atZoneSameInstant(ZoneId.of("UTC"))).isBefore(precoParaCalculo.getFim()))
+                        || LocalTime.from(now.atZoneSameInstant(ZoneId.of("UTC"))).equals(precoParaCalculo.getInicio()) || LocalTime.from(now.atZoneSameInstant(ZoneId.of("UTC"))).equals(precoParaCalculo.getFim())));
 
     }
 
-    public PrecoParaCalculo getPrecoQueSeEnquadraComADataEHora(Instant datetime) {
-        return this.precoParaCalculos.stream().filter(precoParaCalculo -> (DayOfWeek.from(datetime.atZone(ZoneId.of("UTC"))).equals(DayOfWeek.of(precoParaCalculo.getDay().intValue()))) &&
-                ((LocalTime.from(datetime.atZone(ZoneId.of("UTC"))).isAfter(precoParaCalculo.getInicio()) && LocalTime.from(datetime.atZone(ZoneId.of("UTC"))).isBefore(precoParaCalculo.getFim()))
-                        || LocalTime.from(datetime.atZone(ZoneId.of("UTC"))).equals(precoParaCalculo.getInicio()) || LocalTime.from(datetime.atZone(ZoneId.of("UTC"))).equals(precoParaCalculo.getFim()))).findFirst().orElse(null);
+    public PrecoParaCalculo getPrecoQueSeEnquadraComADataEHora(OffsetDateTime datetime) {
+        return this.precoParaCalculos.stream().filter(precoParaCalculo -> (DayOfWeek.from(datetime.atZoneSameInstant(ZoneId.of("UTC"))).equals(DayOfWeek.of(precoParaCalculo.getDay().intValue()))) &&
+                ((LocalTime.from(datetime.atZoneSameInstant(ZoneId.of("UTC"))).isAfter(precoParaCalculo.getInicio()) && LocalTime.from(datetime.atZoneSameInstant(ZoneId.of("UTC"))).isBefore(precoParaCalculo.getFim()))
+                        || LocalTime.from(datetime.atZoneSameInstant(ZoneId.of("UTC"))).equals(precoParaCalculo.getInicio()) || LocalTime.from(datetime.atZoneSameInstant(ZoneId.of("UTC"))).equals(precoParaCalculo.getFim()))).findFirst().orElse(null);
     }
 
-    public Long getValor(Instant entrada, Instant saida) {
+    public Long getValor(OffsetDateTime entrada, OffsetDateTime saida) {
         PrecoParaCalculo precoParaCalculoQueSeEnquadraNaEntrada = this.getPrecoQueSeEnquadraComADataEHora(entrada);
         PrecoParaCalculo precoParaCalculoQueSeEnquadraNaSaida = this.getPrecoQueSeEnquadraComADataEHora(saida);
 
@@ -64,28 +64,28 @@ public class TabelaDePrecos {
         // Caso a saída tenha sido após o horário limite do dia, ou seja, fora de uma faixa de preço 18:10 por exemplo
         // O cálculo considera da entrada até o último horário válido do dia
         else if(precoParaCalculoQueSeEnquadraNaSaida == null){
-            Long valor = (long) (precoParaCalculoQueSeEnquadraNaEntrada.getValor() * (ChronoUnit.MILLIS.between(LocalTime.from(entrada.atZone(ZoneId.of("UTC"))), precoParaCalculoQueSeEnquadraNaEntrada.getFim())/3600000.0));
+            Long valor = (long) (precoParaCalculoQueSeEnquadraNaEntrada.getValor() * (ChronoUnit.MILLIS.between(LocalTime.from(entrada.atZoneSameInstant(ZoneId.of("UTC"))), precoParaCalculoQueSeEnquadraNaEntrada.getFim())/3600000.0));
             List<PrecoParaCalculo> listaDePrecosAposAEntrada = this.precoParaCalculos.stream()
                     .filter(
-                            precoParaCalculo -> DayOfWeek.from(entrada.atZone(ZoneId.of("UTC"))).equals(DayOfWeek.of(precoParaCalculo.getDay().intValue()))
+                            precoParaCalculo -> DayOfWeek.from(entrada.atZoneSameInstant(ZoneId.of("UTC"))).equals(DayOfWeek.of(precoParaCalculo.getDay().intValue()))
                             && precoParaCalculo.getFim().isAfter(precoParaCalculoQueSeEnquadraNaEntrada.getFim())
                     ).collect(Collectors.toList());
             for(PrecoParaCalculo precoParaCalculo : listaDePrecosAposAEntrada)
                 valor += (long) (precoParaCalculo.getValor() * (ChronoUnit.MILLIS.between(precoParaCalculo.getInicio(), precoParaCalculo.getFim())/3600000.0));
             return valor;
         } else {
-            Long valor = (long) (precoParaCalculoQueSeEnquadraNaEntrada.getValor() * (ChronoUnit.MILLIS.between(LocalTime.from(entrada.atZone(ZoneId.of("UTC"))), precoParaCalculoQueSeEnquadraNaEntrada.getFim())/3600000.0));
+            Long valor = (long) (precoParaCalculoQueSeEnquadraNaEntrada.getValor() * (ChronoUnit.MILLIS.between(LocalTime.from(entrada.atZoneSameInstant(ZoneId.of("UTC"))), precoParaCalculoQueSeEnquadraNaEntrada.getFim())/3600000.0));
 
             List<PrecoParaCalculo> listaDePrecosAposAEntrada = this.precoParaCalculos.stream()
                 .filter(
-                        precoParaCalculo -> DayOfWeek.from(entrada.atZone(ZoneId.of("UTC"))).equals(DayOfWeek.of(precoParaCalculo.getDay().intValue()))
+                        precoParaCalculo -> DayOfWeek.from(entrada.atZoneSameInstant(ZoneId.of("UTC"))).equals(DayOfWeek.of(precoParaCalculo.getDay().intValue()))
                     && precoParaCalculo.getFim().isAfter(precoParaCalculoQueSeEnquadraNaEntrada.getFim())
                     && precoParaCalculo.getFim().isBefore(precoParaCalculoQueSeEnquadraNaSaida.getInicio())
                 ).collect(Collectors.toList());
             for (PrecoParaCalculo precoParaCalculo : listaDePrecosAposAEntrada)
                 valor += (long) (precoParaCalculo.getValor() * (ChronoUnit.MILLIS.between(precoParaCalculo.getInicio(), precoParaCalculo.getFim())/3600000.0));
 
-            valor += (long) (precoParaCalculoQueSeEnquadraNaSaida.getValor() * (ChronoUnit.MILLIS.between(precoParaCalculoQueSeEnquadraNaSaida.getInicio(), LocalTime.from(saida.atZone(ZoneId.of("UTC"))))/3600000.0));
+            valor += (long) (precoParaCalculoQueSeEnquadraNaSaida.getValor() * (ChronoUnit.MILLIS.between(precoParaCalculoQueSeEnquadraNaSaida.getInicio(), LocalTime.from(saida.atZoneSameInstant(ZoneId.of("UTC"))))/3600000.0));
 
             return valor;
         }
